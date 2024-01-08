@@ -32,6 +32,21 @@ public class Player : MonoBehaviour
         {
             currentGun.Shoot(); // Вызываем метод Shoot у текущего оружия
         }
+
+        // Получаем значение оси горизонтали
+        float horizontalInput = Input.GetAxis("Horizontal");
+
+        // Проверяем направление движения и изменяем масштаб
+        if (horizontalInput > 0)
+        {
+            // Движение вправо
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (horizontalInput < 0)
+        {
+            // Движение влево
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 
     // FixedUpdate вызывается каждый фиксированный кадр
