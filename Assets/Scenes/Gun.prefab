@@ -93,8 +93,7 @@ GameObject:
   - component: {fileID: 3130437150129979970}
   - component: {fileID: 4659109935001518729}
   - component: {fileID: 1963305572857994293}
-  - component: {fileID: 3515862495818912992}
-  - component: {fileID: 1561883523186217714}
+  - component: {fileID: 3747652843095193732}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -189,19 +188,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &3515862495818912992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656597746154075743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46f338fcffbd2b94b82fb9799ba3b64b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1561883523186217714
+--- !u!114 &3747652843095193732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -213,3 +200,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05adbdd8e751a346b92dbbf26457d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireRate: 0.5

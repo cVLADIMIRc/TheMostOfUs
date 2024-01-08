@@ -8,18 +8,14 @@ public class Gun : MonoBehaviour
     private float nextFire = 0.0f;
 
     // Сделаем метод public, чтобы его можно было вызывать из других классов
-    public void Fire(bool isPlayer)
+    public void Fire()
     {
-        if (isPlayer)
-        {
-            // Реализуйте здесь логику стрельбы
-            Debug.Log("Pew pew! Gun fired!");
-        }
+        // Реализуйте здесь логику стрельбы
+        Debug.Log("Pew pew! Gun fired!");
     }
 
-
     // Метод для подбора оружия игроком
-    public void PickupGun()
+    public void Pickup()
     {
         // Дополнительные действия при поднятии оружия
         gameObject.SetActive(false);
@@ -32,7 +28,7 @@ public class Gun : MonoBehaviour
         {
             // Подбор оружия игроком
             other.GetComponent<Player>().PickupGun(this);
-            Destroy(gameObject);
+            Pickup(); // Вызываем метод Pickup при подборе оружия
         }
     }
 }
