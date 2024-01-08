@@ -1,65 +1,107 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 
 public class Player : MonoBehaviour
 {
     public float health;
-    public float speed;
+    public float walkSpeed = 2f;
+    public float runSpeed = 10f;
     public float jumpForce;
     public float damage;
+    private bool hasGun = false;
+    private Gun currentGun;
 
-    public bool isGrounded;
-    private Rigidbody2D rigidbody2D;
+    private bool isGrounded;
+    private bool isRunning;
+    private new Rigidbody2D rigidbody2D; // »спользуем new, чтобы указать, что это нова€ переменна€
+    private Collider2D playerCollider;
 
-    // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        playerCollider = GetComponent<Collider2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			Jump();
-		}
-		die();
-	}
-	private void FixedUpdate()
-	{
-		Vector2 position = transform.position;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
 
-        position.x += Input.GetAxis("Horizontal") * speed;
-        //position.y += Input.GetAxis("Vertical");
+        if (hasGun && Input.GetKeyDown(KeyCode.Tab))
+        {
+            FireGun();
+        }
 
-        transform.position = position;  
-	}
-    public void Jump()
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isRunning = true;
+        }
+        else
+        {
+            isRunning = false;
+        }
+
+        Die();
+    }
+
+    void FixedUpdate()
     {
-        if (isGrounded) 
+        Move();
+    }
+
+    void Move()
+    {
+        Vector2 position = transform.position;
+        float currentSpeed = isRunning ? runSpeed : walkSpeed;
+        position.x += Input.GetAxis("Horizontal") * currentSpeed * Time.fixedDeltaTime;
+        transform.position = position;
+    }
+
+    void Jump()
+    {
+        if (isGrounded)
         {
             isGrounded = false;
-            rigidbody2D.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
-	public void OnCollisionEnter2D(Collision2D collision)
-	{
-		if(collision.gameObject.tag == "Ground")
+
+    void Die()
+    {
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
         }
-	}
-    public void die()
+    }
+
+    public void PickupGun(Gun gun)
     {
-        if(health <= 0)
+        hasGun = true;
+        currentGun = gun;
+        currentGun.transform.parent = transform;
+        currentGun.transform.localPosition = Vector3.zero;
+        currentGun.gameObject.SetActive(false);
+    }
+
+    void FireGun()
+    {
+        if (currentGun != null)
         {
-            Destroy(gameObject);
+            currentGun.gameObject.SetActive(true);
+            currentGun.Fire(true);
+            currentGun.PickupGun();
+            currentGun.gameObject.SetActive(false);
         }
     }
 }
