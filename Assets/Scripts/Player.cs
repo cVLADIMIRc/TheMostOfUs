@@ -2,27 +2,30 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float health;
-    public float speed;
-    public float jumpForce;
-    public float damage;
+	public float maxHealth;
+	public float health;
+	public float speed;
+	public float jumpForce;
+	public float damage;
 
-    public bool isGrounded;
-    private Rigidbody2D rigidbody2D;
+	public bool isGrounded;
+	private Rigidbody2D rigidbody2D;
+	public Joystick joystick;
 
     public Transform firePoint;
     public Gun currentGun; // Assuming you have a Gun class defined.
 
-    // Start вызывается перед первым обновлением кадра
+    // Start пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     void Start()
     {
+        health = maxHealth;
         rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update вызывается один раз за кадр
+    // Update пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (joystick.Vertical > 0.5)
         {
             Jump();
         }
@@ -30,73 +33,70 @@ public class Player : MonoBehaviour
 
         if (currentGun != null)
         {
-            currentGun.Shoot(); // Вызываем метод Shoot у текущего оружия
+            currentGun.Shoot(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Shoot пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         }
 
-        // Получаем значение оси горизонтали
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float horizontalInput = Input.GetAxis("Horizontal");
 
-        // Проверяем направление движения и изменяем масштаб
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (horizontalInput > 0)
         {
-            // Движение вправо
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             transform.localScale = new Vector3(1, 1, 1);
         }
         else if (horizontalInput < 0)
         {
-            // Движение влево
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             transform.localScale = new Vector3(-1, 1, 1);
         }
     }
 
-    // FixedUpdate вызывается каждый фиксированный кадр
-    private void FixedUpdate()
-    {
-        Vector2 position = transform.position;
+    // FixedUpdate пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+    void FixedUpdate()
+	{
+		rigidbody2D.velocity = new Vector2(joystick.Horizontal * speed, rigidbody2D.velocity.y);
+	}
 
-        position.x += Input.GetAxis("Horizontal") * speed;
-
-        transform.position = position;
-    }
-
-    // Метод для прыжка
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public void Jump()
-    {
-        if (isGrounded)
-        {
-            isGrounded = false;
-            rigidbody2D.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
-        }
-    }
+	{
+		if (isGrounded && joystick.Vertical >= 0.5f)
+		{
+			isGrounded = false;
+			rigidbody2D.velocity = Vector2.up * jumpForce;
+		}
+	}
 
-    // Обработчик столкновения с землей
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
         }
-        if (collision.gameObject.tag == "Gun") // Проверяем, что столкнулись с оружием
+        if (collision.gameObject.tag == "Gun") // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         {
             Gun gunToPickup = collision.gameObject.GetComponent<Gun>();
             if (gunToPickup != null)
             {
-                PickupGun(gunToPickup); // Вызываем метод для поднятия оружия
-                Destroy(collision.gameObject); // Уничтожаем оружие на земле
+                PickupGun(gunToPickup); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                Destroy(collision.gameObject); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             }
         }
     }
 
-    // Метод для проверки условия смерти
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public void die()
     {
         if (health <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            // Destroy(gameObject);
         }
     }
 
-    // Метод для поднятия оружия
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public void PickupGun(Gun gunToPickup)
     {
         Debug.Log("Picking up gun: " + gunToPickup.name);
