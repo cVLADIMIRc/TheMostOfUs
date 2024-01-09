@@ -8,6 +8,7 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class Player : MonoBehaviour
 {
+	public float maxHealth;
 	public float health;
 	public float speed;
 	public float jumpForce;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+		health = maxHealth;
 		rigidbody2D = GetComponent<Rigidbody2D>();
 	}
 
@@ -54,7 +56,8 @@ public class Player : MonoBehaviour
 	{
 		if (health <= 0)
 		{
-			Destroy(gameObject);
+			gameObject.SetActive(false);
+			//Destroy(gameObject);
 		}
 	}
 }

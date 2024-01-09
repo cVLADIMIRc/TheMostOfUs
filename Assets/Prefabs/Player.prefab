@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6721851759667848074}
   - component: {fileID: 2130083496364300217}
+  - component: {fileID: 2411732481957283129}
   - component: {fileID: 927223747499142531}
   - component: {fileID: 190793454390957235}
   m_Layer: 0
@@ -46,12 +47,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bac9d455da743e46b78d8821da593a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 10
   health: 10
   speed: 10
   jumpForce: 5
   damage: 1
   isGrounded: 0
   joystick: {fileID: 0}
+--- !u!114 &2411732481957283129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247840885772697185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a1522d87844404c86287bf298fd138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 0}
+  player: {fileID: 0}
+  bar: {fileID: 0}
+  fill: 0
 --- !u!50 &927223747499142531
 Rigidbody2D:
   serializedVersion: 4
