@@ -10,7 +10,10 @@ public class MainMenu : MonoBehaviour
 	public void Start()
 	{
         audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
+        if(audioSource)
+        {
+            audioSource.Play();
+        }
 	}
 	public void Play(int index)
     {

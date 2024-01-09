@@ -54,6 +54,8 @@ MonoBehaviour:
   damage: 1
   isGrounded: 0
   joystick: {fileID: 0}
+  firePoint: {fileID: 0}
+  currentGun: {fileID: 0}
 --- !u!114 &2411732481957283129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,8 +70,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 0}
   player: {fileID: 0}
-  bar: {fileID: 0}
-  fill: 0
 --- !u!50 &927223747499142531
 Rigidbody2D:
   serializedVersion: 4
@@ -189,7 +189,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.083200455, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

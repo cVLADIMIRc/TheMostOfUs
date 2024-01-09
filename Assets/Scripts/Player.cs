@@ -1,4 +1,6 @@
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class Player : MonoBehaviour
 	public bool isGrounded;
 	private Rigidbody2D rigidbody2D;
 	public Joystick joystick;
+    public DeathScreen deathScreen;
 
     public Transform firePoint;
     public Gun currentGun; // Assuming you have a Gun class defined.
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
         }
 
         // �������� �������� ��� �����������
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = joystick.Horizontal;
 
         // ��������� ����������� �������� � �������� �������
         if (horizontalInput > 0)
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour
         {
             isGrounded = true;
         }
-        if (collision.gameObject.tag == "Gun") // ���������, ��� ����������� � �������
+        if (collision.gameObject.tag == "Weapon") // ���������, ��� ����������� � �������
         {
             Gun gunToPickup = collision.gameObject.GetComponent<Gun>();
             if (gunToPickup != null)
@@ -91,9 +94,14 @@ public class Player : MonoBehaviour
     {
         if (health <= 0)
         {
-            gameObject.SetActive(false);
-            // Destroy(gameObject);
-        }
+            if (!deathScreen.gameObject.activeSelf)
+            {
+                deathScreen.gameObject.SetActive(true);
+                gameObject.SetActive(false);
+			    //SceneManager.LoadScene(0);
+            }
+			// Destroy(gameObject);
+		}
     }
 
     // ����� ��� �������� ������
